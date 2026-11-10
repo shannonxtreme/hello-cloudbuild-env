@@ -29,6 +29,21 @@ steps:
   - 'CLOUDSDK_COMPUTE_REGION=us-central1'
   - 'CLOUDSDK_CONTAINER_CLUSTER=hello-cloudbuild'
 
+# Set up write access to the hello-cloudbuild-env repository
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Copy private key
+  secretEnv: ['SSH_KEY']
+  entrypoint: /bin/sh
+  args:
+  - -c
+  - |
+    echo "$$SSH_KEY" > /root/.ssh/id_ed25519 && \
+    chmod 400 /root/.ssh/id_ed25519 && \
+    cp known_hosts.github /root/.ssh/known_hosts
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+
 # This step copies the applied manifest to the production branch
 # The COMMIT_SHA variable is automatically
 # replaced by Cloud Build.
@@ -47,6 +62,15 @@ steps:
     # Commit the kubernetes.yaml file with a descriptive commit message
     git commit -m "Manifest from commit $COMMIT_SHA
     $(git log --format=%B -n 1 $COMMIT_SHA)" && \
-    # Push the changes back to Cloud Source Repository
+    # Push the changes back to the remote repository
     git push origin production
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/shannduin-joonix/secrets/gke-github-keys/versions/latest
+    env: 'SSH_KEY'
+
 # [END gke_management_gitops_delivery_cloudbuild_delivery]
