@@ -44,6 +44,16 @@ steps:
   - name: 'ssh'
     path: /root/.ssh
 
+# Clone the hello-cloudbuild-env repository by using SSH
+- name: 'gcr.io/cloud-builders/git'
+  id: Clone env repository
+  args:
+  - clone
+  - git@github.com:shannonxtreme/hello-cloudbuild-env.git
+  volumes:
+  - name: 'ssh'
+    path: /root/.ssh
+
 # This step copies the applied manifest to the production branch
 # The COMMIT_SHA variable is automatically
 # replaced by Cloud Build.
