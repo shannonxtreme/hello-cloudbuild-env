@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
       - name: hello-cloudbuild
-        image: us-central1-docker.pkg.dev/shannduin-joonix/my-repository/hello-cloudbuild:2950668
+        image: us-central1-docker.pkg.dev/shannduin-joonix/my-repository/hello-cloudbuild:e41e1c7
         ports:
         - containerPort: 8080
 ---
