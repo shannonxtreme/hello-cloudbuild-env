@@ -67,7 +67,6 @@ steps:
   - '-c'
   - |
     set -x && \
-    cd hello-cloudbuild-env && \
     git remote set-url origin git@github.com:$REPO_FULL_NAME && \
     # Configure Git to create commits with Cloud Build's service account
     git config user.email $SERVICE_ACCOUNT_EMAIL && \
