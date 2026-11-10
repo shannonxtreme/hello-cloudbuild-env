@@ -47,9 +47,13 @@ steps:
 # Clone the hello-cloudbuild-env repository by using SSH
 - name: 'gcr.io/cloud-builders/git'
   id: Clone env repository
+  entrypoint: /bin/sh
   args:
-  - clone
-  - git@github.com:shannonxtreme/hello-cloudbuild-env.git
+  - -c
+  - |
+    git clone git@github.com:shannonxtreme/hello-cloudbuild-env.git && \
+    cd hello-cloudbuild-env && \
+    git remote set-url origin git@github.com:shannonxtreme/hello-cloudbuild-env.git 
   volumes:
   - name: 'ssh'
     path: /root/.ssh
